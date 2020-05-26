@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <div>
-      <table width="100%">
-        <tr>
-          <th>Quantidade de blocos da memória principal</th>
-          <th>Quantidade de quadros da memória cache</th>
-          <th>Tamanho do bloco e quantidade de celulas</th>
-        </tr>
-        <tr>
-          <td>
-            <select v-model="memPrincipalMax">
+    <div class="container-fluid m-0 p-0">
+      <div class="row m-0 p-0">
+        <div class="col-md-4">
+          <div class="input-group mb-3">
+            <div class="col-md-12">
+              <label>Quantidade de blocos na memória principal</label>
+            </div>
+            <select v-model="memPrincipalMax" class="custom-select">
               <option value="2">2</option>
               <option value="4">4</option>
               <option value="8">8</option>
@@ -21,9 +19,12 @@
               <option value="512">512</option>
               <option value="1024">1024</option>
             </select>
-          </td>
-          <td>
-            <select v-model="memCacheMax" :min="memPrincipalMax">
+          </div>
+          <div class="input-group mb-3">
+            <div class="col-md-12">
+              <label>Quantidade de quadros na memória cache</label>
+            </div>
+            <select v-model="memCacheMax" class="custom-select">
               <option value="2">2</option>
               <option value="4">4</option>
               <option value="8">8</option>
@@ -35,15 +36,80 @@
               <option value="512">512</option>
               <option value="1024">1024</option>
             </select>
-          </td>
-          <td>
-            <input v-model="tamanhoBloco" type="number" min="1" />
-          </td>
+          </div>
+          <div class="input-group mb-3">
+            <div class="col-md-12">
+              <label>Tamanho dos blocos e celulas</label>
+            </div>
+            <select v-model="memCacheMax" class="custom-select">
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+              <option value="32">32</option>
+              <option value="64">64</option>
+              <option value="128">128</option>
+              <option value="256">256</option>
+              <option value="512">512</option>
+              <option value="1024">1024</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Acessos
+              <span class="badge badge-primary badge-pill">{{NumerodeAcessos}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Acertos
+              <span class="badge badge-primary badge-pill">{{NumerodeAcertos}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Faltas
+              <span class="badge badge-primary badge-pill">{{NumerodeFaltas}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Leituras
+              <span class="badge badge-primary badge-pill">{{NumerodeLeituras}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Escritas
+              <span class="badge badge-primary badge-pill">{{NumerodeEscritas}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Acertos na Leitura
+              <span
+                class="badge badge-primary badge-pill"
+              >{{NumerodeAcertosnaLeitura}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Acertos na Escrita
+              <span
+                class="badge badge-primary badge-pill"
+              >{{NumerodeAcertosnaEscrita}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Faltas na Leitura
+              <span
+                class="badge badge-primary badge-pill"
+              >{{NumerodeFaltasnaLeitura}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Numero de Faltas na Escrita
+              <span
+                class="badge badge-primary badge-pill"
+              >{{NumerodeFaltasnaEscrita}}</span>
+            </li>
+          </ul>
+        </div>
+        <!-- <table width="100%">
         </tr>
       </table>
-      <button @click="rafatorarMemoriaPrincipal()">aplicar</button>
+        <button @click="rafatorarMemoriaPrincipal()">aplicar</button>-->
 
-      <table width="100%">
+        <!-- <table width="100%">
         <h1>Write Read</h1>
         <tr>
           <th>Endereço</th>
@@ -61,42 +127,57 @@
             <button @click="buscar()">buscar</button>
           </td>
         </tr>
-      </table>
+        </table>-->
+      </div>
+
+      <div class="row m-0 p-0 mt-5 text-center">
+        <div class="col-md-6 m-0 p-0">
+          <h1 class="mb-4">Memória Principal</h1>
+
+          <table class="table table-dark table-hover m-0 p-0">
+            <thead>
+              <tr>
+                <th>Bloco</th>
+                <th>Endereço</th>
+                <th>Dado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(celula, index) in memPrincipal" :key="celula.endereco">
+                <td
+                  class="align-middle"
+                  v-if="index % tamanhoBloco == 0"
+                  :rowspan="tamanhoBloco"
+                >{{celula.bloco}}</td>
+                <td>{{celula.endereco}}</td>
+                <td>{{celula.data}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-6 m-0 p-0">
+          <h1 class="mb-4">Memória Cache</h1>
+          <table class="table table-hover m-0 p-0">
+            <thead>
+              <tr>
+                <th>Rotúlo</th>
+                <th>Quadro</th>
+                <th v-for="celula in tamanhoBloco" :key="celula">Celula {{celula-1}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(quadro) in memCache" :key="quadro.quadro">
+                <td>{{quadro.rotulo}}</td>
+                <td>{{quadro.quadro}}</td>
+                <td v-for="celula in quadro.celulas" :key="celula">{{celula}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- listagem da memória cache -->
     </div>
-
-    <!-- listagem da memória principal -->
-    <div>
-      <table width="50%">
-        <h1>Memória Principal</h1>
-        <tr>
-          <th>Bloco</th>
-          <th>Endereço</th>
-          <th>Dado</th>
-        </tr>
-
-        <tr v-for="(celula, index) in memPrincipal" :key="celula.endereco">
-          <td v-if="index % tamanhoBloco == 0" :rowspan="tamanhoBloco">{{celula.bloco}}</td>
-          <td>{{celula.endereco}}</td>
-          <td>{{celula.data}}</td>
-        </tr>
-      </table>
-
-      <table width="50%">
-        <h1>Memória Cache</h1>
-        <tr>
-          <th>Rotúlo</th>
-          <th>Quadro</th>
-          <th v-for="celula in tamanhoBloco" :key="celula">Celula {{celula-1}}</th>
-        </tr>
-        <tr v-for="(quadro) in memCache" :key="quadro.quadro">
-          <td>{{quadro.rotulo}}</td>
-          <td>{{quadro.quadro}}</td>
-          <td v-for="celula in quadro.celulas" :key="celula">{{celula}}</td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- listagem da memória cache -->
   </div>
 </template>
 
@@ -108,11 +189,21 @@ export default {
       memPrincipal: [],
       memCache: [],
 
-      memPrincipalMax: 256,
+      memPrincipalMax: 4,
       memCacheMax: 16,
 
       enderecoBusca: "00101011",
-      dadoBusca: ""
+      dadoBusca: "",
+
+      NumerodeAcessos: 0,
+      NumerodeAcertos: 0,
+      NumerodeFaltas: 0,
+      NumerodeLeituras: 0,
+      NumerodeEscritas: 0,
+      NumerodeAcertosnaLeitura: 0,
+      NumerodeAcertosnaEscrita: 0,
+      NumerodeFaltasnaLeitura: 0,
+      NumerodeFaltasnaEscrita: 0
     };
   },
   methods: {
@@ -209,21 +300,7 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-table {
-  text-align: center;
-  padding: 0px 50px;
-  float: left;
-}
-td {
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-td:hover,
-td.ativo {
-  cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 1);
 }
 </style>
